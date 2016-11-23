@@ -11,7 +11,10 @@ const CustomEditor = (props) => {
     let editor;
     return (
         <div id="editor" onClick={() => editor.focus()}>
-            <Editor {...props} ref={(component) => { editor = component; }} />
+            <Editor
+                {...props}
+                ref={(component) => { editor = component; }}
+            />
         </div>
     );
 };
