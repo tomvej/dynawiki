@@ -5,7 +5,7 @@ import {Editor} from 'draft-js';
 import './index.less';
 
 import {getEditorState} from './selectors';
-import {setEditorState} from './actions';
+import {setEditorState, addCharacters} from './actions';
 
 const CustomEditor = (props) => {
     let editor;
@@ -25,6 +25,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     onChange: (editorState) => dispatch(setEditorState(editorState)),
+    handleBeforeInput: (chars) => {
+        dispatch(addCharacters(chars));
+        return 'not-handled';
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomEditor);
