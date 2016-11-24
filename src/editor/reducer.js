@@ -15,12 +15,19 @@ class State extends Record({
     }
 }
 
+const handleEditorState = (state, editorState) => state.setEditorState(editorState);
+
+const handleHistory = (state, characters) => {
+    const history = state.history.concat(characters);
+    return state.setHistory(history);
+};
+
 export default (state = new State(), action) => {
     switch (action.type) {
         case SET_EDITOR_STATE:
-            return state.setEditorState(action.editorState);
+            return handleEditorState(state, action.editorState);
         case ADD_CHARACTERS:
-            return state.setHistory(state.history.concat(action.characters));
+            return handleHistory(state, action.characters);
         default:
             return state;
     }
