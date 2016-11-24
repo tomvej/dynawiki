@@ -4,8 +4,9 @@ import {Editor} from 'draft-js';
 
 import './index.less';
 
-import {getEditorState} from './selectors';
-import {setEditorState, addCharacters} from './actions';
+import {getEditorState, getHistory} from './selectors';
+import {setEditorState, addCharacters, substitute} from './actions';
+import substitutions from './substitutions';
 
 const CustomEditor = (props) => {
     let editor;
@@ -21,14 +22,28 @@ const CustomEditor = (props) => {
 
 const mapStateToProps = (state) => ({
     editorState: getEditorState(state),
+    history: getHistory(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
     onChange: (editorState) => dispatch(setEditorState(editorState)),
+    sendAddCharacters: (chars) => dispatch(addCharacters(chars)),
+    sendSubstitute: (source) => dispatch(substitute(source)),
+});
+
+const mergeProps = ({editorState, history}, {onChange, sendAddCharacters, sendSubstitute}) => ({
+    editorState,
+    onChange,
     handleBeforeInput: (chars) => {
-        dispatch(addCharacters(chars));
-        return 'not-handled';
+        const source = Object.keys(substitutions).find((property) => history.concat(chars).endsWith(property));
+        if (source) {
+            sendSubstitute(source);
+            return 'not-handled';
+        } else {
+            sendAddCharacters(chars);
+            return 'not-handled';
+        }
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomEditor);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(CustomEditor);
