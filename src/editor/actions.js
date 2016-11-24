@@ -16,7 +16,8 @@ export const addCharacters = (characters) => ({
     characters,
 });
 
-export const substitute = (source) => ({
+export const substitute = (target, length) => ({
     type: SUBSTITUTE,
-    source,
+    target,
+    length,
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Editor} from 'draft-js';
+import {compose} from 'redux';
 
 import './index.less';
 
@@ -26,9 +27,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onChange: (editorState) => dispatch(setEditorState(editorState)),
-    sendAddCharacters: (chars) => dispatch(addCharacters(chars)),
-    sendSubstitute: (source) => dispatch(substitute(source)),
+    onChange: compose(dispatch, setEditorState),
+    sendAddCharacters: compose(dispatch, addCharacters),
+    sendSubstitute: compose(dispatch, substitute),
 });
 
 const mergeProps = ({editorState, history}, {onChange, sendAddCharacters, sendSubstitute}) => ({
@@ -37,8 +38,8 @@ const mergeProps = ({editorState, history}, {onChange, sendAddCharacters, sendSu
     handleBeforeInput: (chars) => {
         const source = Object.keys(substitutions).find((property) => history.concat(chars).endsWith(property));
         if (source) {
-            sendSubstitute(source);
-            return 'not-handled';
+            sendSubstitute(substitutions[source], source.length - chars.length);
+            return 'handled';
         } else {
             sendAddCharacters(chars);
             return 'not-handled';
