@@ -5,9 +5,8 @@ import {compose} from 'redux';
 
 import './index.less';
 
-import {getEditorState, getHistory} from './selectors';
-import {setEditorState, addCharacters, substitute} from './actions';
-import substitutions from './substitutions';
+import {getEditorState} from './selectors';
+import {setEditorState, substitute} from './actions';
 
 const CustomEditor = (props) => {
     let editor;
@@ -23,28 +22,17 @@ const CustomEditor = (props) => {
 
 const mapStateToProps = (state) => ({
     editorState: getEditorState(state),
-    history: getHistory(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
     onChange: compose(dispatch, setEditorState),
-    sendAddCharacters: compose(dispatch, addCharacters),
     sendSubstitute: compose(dispatch, substitute),
 });
 
-const mergeProps = ({editorState, history}, {onChange, sendAddCharacters, sendSubstitute}) => ({
+const mergeProps = ({editorState}, {onChange, sendSubstitute}) => ({
     editorState,
     onChange,
-    handleBeforeInput: (chars) => {
-        const source = Object.keys(substitutions).find((property) => history.concat(chars).endsWith(property));
-        if (source) {
-            sendSubstitute(substitutions[source], source.length - chars.length);
-            return 'handled';
-        } else {
-            sendAddCharacters(chars);
-            return 'not-handled';
-        }
-    },
+    handleBeforeInput: () => 'not-handled',
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(CustomEditor);
