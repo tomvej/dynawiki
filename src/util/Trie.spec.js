@@ -50,28 +50,34 @@ describe('Trie', () => {
             prefixTrie.find('keystone').should.equal(20);
         });
     });
-    describe('findPrefix', () => {
-        it('returns undefined for empty trie', () => {
-            expect(empty.findPrefix('key')).to.be.undefined();
+    describe('findPrefixes', () => {
+        it('returns empty array for empty trie', () => {
+            empty.findPrefixes('key').should.deep.equal([]);
         });
-        it('returns value for existing key', () => {
-            trie.findPrefix('key').should.equal(15);
+        it('returns single value for existing key', () => {
+            trie.findPrefixes('key').should.deep.equal([{key: 'key', value: 15}]);
         });
         it('returns value for both existing keys', () => {
-            doubleTrie.findPrefix('keypad').should.equal(25);
-            doubleTrie.findPrefix('keystone').should.equal(13);
+            doubleTrie.findPrefixes('keypad').should.deep.equal([{key: 'keypad', value: 25}]);
+            doubleTrie.findPrefixes('keystone').should.deep.equal([{key: 'keystone', value: 13}]);
         });
-        it('returns undefined for non-existing key', () => {
-            expect(trie.findPrefix('baf')).to.be.undefined();
+        it('returns empty array for non-existing key', () => {
+            trie.findPrefixes('baf').should.deep.equal([]);
         });
-        it('returns undefined for existing key prefix', () => {
-            expect(trie.findPrefix('ke')).to.be.undefined();
+        it('returns empty array for existing key prefix', () => {
+            trie.findPrefixes('ke').should.deep.equal([]);
         });
         it('returns value for existing key plus characters', () => {
-            trie.findPrefix('keys').should.equal(15);
+            trie.findPrefixes('keys').should.deep.equal([{key: 'key', value: 15}]);
         });
-        it('returns key value when there is a key and its prefix', () => {
-            prefixTrie.findPrefix('keystone').should.equal(20);
+        it('returns list of values when there is a key and its prefix', () => {
+            prefixTrie.findPrefixes('keystone').should.deep.equal([
+                {key: 'key', value: 15},
+                {key: 'keystone', value: 20},
+            ]);
         });
+    });
+    describe('hasPrefix', () => {
+
     });
 });

@@ -6,16 +6,27 @@ class Trie extends Record({data: Map(), length: 0}) {
     find(key) {
         return this.data.getIn(key.split('').concat(E));
     }
-    findPrefix(key) {
-        let root = this.data;
-        const iterator = key.split('')[Symbol.iterator]();
+    findPrefixes(key) {
+        const prefixes = (root, result, prefix, suffix) => {
+            if (!root) {
+                return result;
+            }
 
-        let {done, value} = iterator.next();
-        while (!done && root.get(value)) {
-            root = root.get(value);
-            ({done, value} = iterator.next());
-        }
-        return root.get(E);
+            if (root.get(E)) {
+                result.push({key: prefix, value: root.get(E)});
+            }
+
+            if (suffix) {
+                const char = suffix.slice(0, 1);
+                return prefixes(root.get(char), result, prefix + char, suffix.slice(1));
+            } else {
+                return result;
+            }
+        };
+        return prefixes(this.data, [], '', key);
+    }
+    hasPrefixes(prefix) {
+        return this.data.hasIn(prefix.split(''));
     }
 }
 
