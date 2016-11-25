@@ -3,10 +3,12 @@ import {connect} from 'react-redux';
 import {Editor} from 'draft-js';
 import {compose} from 'redux';
 
-import './index.less';
+import {reverse} from '../util';
 
+import './index.less';
 import {getEditorState} from './selectors';
 import {setEditorState, substitute} from './actions';
+import substitutes from './substitute';
 
 const CustomEditor = (props) => {
     let editor;
@@ -32,7 +34,22 @@ const mapDispatchToProps = (dispatch) => ({
 const mergeProps = ({editorState}, {onChange, sendSubstitute}) => ({
     editorState,
     onChange,
-    handleBeforeInput: () => 'not-handled',
+    handleBeforeInput: (chars) => {
+        if (substitutes.hasPrefix(reverse(chars))) {
+            const selection = editorState.getSelection();
+            const block = editorState.getCurrentContent().getBlockForKey(selection.getFocusKey());
+            const text = block.getText().slice(
+                Math.max(0, selection.getAnchorOffset() - substitutes.length),
+                selection.getFocusOffset()
+            );
+            const prefix = substitutes.findPrefixes(reverse(text + chars))[0];
+            if (prefix) {
+                sendSubstitute(prefix.value, prefix.key.length - chars.length);
+                return 'handled';
+            }
+        }
+        return 'not-handled';
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(CustomEditor);
