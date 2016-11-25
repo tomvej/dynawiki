@@ -78,6 +78,20 @@ describe('Trie', () => {
         });
     });
     describe('hasPrefix', () => {
-
+        it('returns false on empty trie', () => {
+            empty.hasPrefix('key').should.be.false();
+        });
+        it('returns true for existing key', () => {
+            trie.hasPrefix('key').should.be.true();
+        });
+        it('returns true for existing key prefix', () => {
+            trie.hasPrefix('ke').should.be.true();
+        });
+        it('returns true for common prefix', () => {
+            doubleTrie.hasPrefix('key').should.be.true();
+        });
+        it('returns false for non-existing key', () => {
+            trie.hasPrefix('baf').should.be.false();
+        });
     });
 });

@@ -25,7 +25,7 @@ class Trie extends Record({data: Map(), length: 0}) {
         };
         return prefixes(this.data, [], '', key);
     }
-    hasPrefixes(prefix) {
+    hasPrefix(prefix) {
         return this.data.hasIn(prefix.split(''));
     }
 }
