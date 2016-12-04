@@ -1,13 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Editor} from 'draft-js';
+import {Editor, Modifier, EditorState} from 'draft-js';
 import {compose} from 'redux';
 
 import {reverse} from '../util';
 
 import './index.less';
 import {getEditorState} from './selectors';
-import {setEditorState, substitute} from './actions';
+import {setEditorState} from './actions';
 import substitutes from './substitute';
 
 const CustomEditor = (props) => {
@@ -28,10 +28,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     onChange: compose(dispatch, setEditorState),
-    sendSubstitute: compose(dispatch, substitute),
 });
 
-const mergeProps = ({editorState}, {onChange, sendSubstitute}) => ({
+const mergeProps = ({editorState}, {onChange}) => ({
     editorState,
     onChange,
     handleBeforeInput: (chars) => {
@@ -44,7 +43,19 @@ const mergeProps = ({editorState}, {onChange, sendSubstitute}) => ({
             );
             const prefix = substitutes.findPrefixes(reverse(text + chars))[0];
             if (prefix) {
-                sendSubstitute(prefix.value, prefix.key.length - chars.length);
+                const length = prefix.key.length - chars.length;
+                const replaceSelection = selection.set('anchorOffset', selection.getAnchorOffset() - length);
+                const contentState = Modifier.replaceText(
+                    editorState.getCurrentContent(),
+                    replaceSelection,
+                    prefix.value
+                );
+
+                onChange(EditorState.push(
+                    editorState,
+                    contentState,
+                    'insert-characters'
+                ));
                 return 'handled';
             }
         }

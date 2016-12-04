@@ -1,7 +1,7 @@
 export const NAME = 'editor';
 
 export const substitutions = {
-    '--': 8211,
+    '--': 8212,
     '...': 8230,
     '->': 8594,
     '<-': 8592,
