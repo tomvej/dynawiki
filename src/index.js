@@ -5,22 +5,18 @@ import {AppContainer} from 'react-hot-loader';
 import store from './store';
 import Root from './Root';
 
-render(
-    <AppContainer>
-        <Root store={store} />
-    </AppContainer>,
-    document.getElementById('content')
-);
+const renderApp = (RootComponent) => {
+    render(
+        <AppContainer>
+            <RootComponent store={store} />
+        </AppContainer>,
+        document.getElementById('content')
+    );
+};
+renderApp(Root);
 
 if (module.hot) {
     module.hot.accept('./Root', () => {
-        System.import('./Root').then((root) => {
-            render(
-                <AppContainer>
-                    <root.default store={store} />
-                </AppContainer>,
-                document.getElementById('content')
-            );
-        });
+        System.import('./Root').then((root) => renderApp(root.default));
     });
 }
