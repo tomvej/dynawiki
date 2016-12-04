@@ -8,8 +8,22 @@ import substitutes from './substitute';
 class CustomEditor extends Editor {
     constructor(props) {
         super(props);
+        this.state = {history: ''};
 
+        this.onChange = this.onChange.bind(this);
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
+    }
+
+    get history() {
+        return this.state.history;
+    }
+
+    set history(text) {
+        this.setState({history: text});
+    }
+
+    onChange(editorState) {
+        this.props.setEditorState(editorState);
     }
 
     handleBeforeInput(chars) {
@@ -44,9 +58,10 @@ class CustomEditor extends Editor {
     render() {
         return (
             <div id="editor" onClick={() => this.editor.focus()}>
+                <div style={{color: 'red'}}>{this.history}</div>
                 <Editor
                     ref={(component) => { this.editor = component; }}
-                    onChange={this.props.setEditorState}
+                    onChange={this.onChange}
                     editorState={this.props.editorState}
                     handleBeforeInput={this.handleBeforeInput}
                 />
