@@ -15,4 +15,10 @@ const store = createStore(reducer, middleware);
 
 sagaMiddleware.run(saga);
 
+if (module.hot) {
+    module.hot.accept('./reducer', () => {
+        System.import('./reducer').then((newReducer) => store.replaceReducer(newReducer.default));
+    });
+}
+
 export default store;
