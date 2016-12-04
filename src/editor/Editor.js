@@ -6,7 +6,7 @@ import './index.less';
 import substitutes from './substitute';
 
 const contentChanged = (prev, next) => prev.getCurrentContent() !== next.getCurrentContent();
-const selectionChanged = (prev, next) => prev.getSelection() != next.getSelection();
+const selectionChanged = (prev, next) => prev.getSelection() !== next.getSelection();
 
 class CustomEditor extends Editor {
     constructor(props) {
@@ -39,14 +39,9 @@ class CustomEditor extends Editor {
 
     handleBeforeInput(chars) {
         if (substitutes.hasPrefix(reverse(chars))) {
-            const selection = this.props.editorState.getSelection();
-            const block = this.props.editorState.getCurrentContent().getBlockForKey(selection.getFocusKey());
-            const text = block.getText().slice(
-                Math.max(0, selection.getAnchorOffset() - substitutes.length),
-                selection.getFocusOffset()
-            );
-            const prefix = substitutes.findPrefixes(reverse(text + chars))[0];
+            const prefix = substitutes.findPrefixes(reverse(this.history + chars))[0];
             if (prefix) {
+                const selection = this.props.editorState.getSelection();
                 const length = prefix.key.length - chars.length;
                 const replaceSelection = selection.set('anchorOffset', selection.getAnchorOffset() - length);
                 const contentState = Modifier.replaceText(
