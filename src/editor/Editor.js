@@ -11,18 +11,10 @@ const selectionChanged = (prev, next) => prev.getSelection() != next.getSelectio
 class CustomEditor extends Editor {
     constructor(props) {
         super(props);
-        this.state = {history: ''};
+        this.history = '';
 
         this.onChange = this.onChange.bind(this);
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
-    }
-
-    get history() {
-        return this.state.history;
-    }
-
-    set history(text) {
-        this.setState({history: text});
     }
 
     onChange(editorState) {
@@ -72,6 +64,7 @@ class CustomEditor extends Editor {
                 return 'handled';
             }
         }
+
         this.history += chars;
         return 'not-handled';
     }
@@ -85,7 +78,6 @@ class CustomEditor extends Editor {
                     editorState={this.props.editorState}
                     handleBeforeInput={this.handleBeforeInput}
                 />
-                <div style={{color: 'red'}}>{this.history}</div>
             </div>
         );
     }
