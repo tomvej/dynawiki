@@ -15,6 +15,7 @@ class CustomEditor extends Editor {
 
         this.onChange = this.onChange.bind(this);
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
+        this.handlePastedText = this.handlePastedText.bind(this);
     }
 
     onChange(editorState) {
@@ -64,6 +65,34 @@ class CustomEditor extends Editor {
         return 'not-handled';
     }
 
+    handlePastedText(text) {
+        let end = text.length;
+        let result = '';
+        while (end > 0) {
+            const search = reverse(text.slice(Math.max(0, end - substitutes.length), end));
+            const prefix = substitutes.findPrefixes(search)[0];
+            if (prefix) {
+                result += prefix.value;
+                end -= prefix.key.length;
+            } else {
+                result += search.charAt(0);
+                end -= 1;
+            }
+        }
+        const contentState = Modifier.replaceText(
+            this.props.editorState.getCurrentContent(),
+            this.props.editorState.getSelection(),
+            reverse(result)
+        );
+        this.props.setEditorState(EditorState.push(
+            this.props.editorState,
+            contentState,
+            'insert-fragment'
+        ));
+
+        return 'handled';
+    }
+
     render() {
         return (
             <div id="editor" onClick={() => this.editor.focus()}>
@@ -72,6 +101,7 @@ class CustomEditor extends Editor {
                     onChange={this.onChange}
                     editorState={this.props.editorState}
                     handleBeforeInput={this.handleBeforeInput}
+                    handlePastedText={this.handlePastedText}
                 />
             </div>
         );
