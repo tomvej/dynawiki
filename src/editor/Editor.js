@@ -44,6 +44,7 @@ class CustomEditor extends Editor {
                     prefix.value
                 );
 
+                this.history = this.history.slice(0, -length) + prefix.value;
                 this.props.setEditorState(EditorState.push(
                     this.props.editorState,
                     contentState,
@@ -52,19 +53,20 @@ class CustomEditor extends Editor {
                 return 'handled';
             }
         }
+        this.history += chars;
         return 'not-handled';
     }
 
     render() {
         return (
             <div id="editor" onClick={() => this.editor.focus()}>
-                <div style={{color: 'red'}}>{this.history}</div>
                 <Editor
                     ref={(component) => { this.editor = component; }}
                     onChange={this.onChange}
                     editorState={this.props.editorState}
                     handleBeforeInput={this.handleBeforeInput}
                 />
+                <div style={{color: 'red'}}>{this.history}</div>
             </div>
         );
     }
