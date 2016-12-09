@@ -4,9 +4,7 @@ import {reverse} from '../util';
 
 import './index.less';
 import substitutes from './substitute';
-
-const contentChanged = (prev, next) => prev.getCurrentContent() !== next.getCurrentContent();
-const selectionChanged = (prev, next) => prev.getSelection() !== next.getSelection();
+import EditorStateChange from './EditorStateChange';
 
 class CustomEditor extends Editor {
     constructor(props) {
@@ -19,7 +17,8 @@ class CustomEditor extends Editor {
     }
 
     onChange(editorState) {
-        if (contentChanged(this.props.editorState, editorState)) {
+        const diff = new EditorStateChange({previous: this.props.editorState, next: editorState});
+        if (diff.hasContentChanged()) {
             switch (editorState.getLastChangeType()) {
                 case 'insert-characters':
                     // do nothing
@@ -31,7 +30,7 @@ class CustomEditor extends Editor {
                     this.history = '';
                     break;
             }
-        } else if (selectionChanged(this.props.editorState, editorState)) {
+        } else if (diff.hasSelectionChanged()) {
             this.history = '';
         }
 
