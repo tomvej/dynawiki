@@ -19,8 +19,11 @@ export default class EditorStateChange extends Record({previous: null, next: nul
     getRemovedBlocks() {
         return getBlockKeys(this.previous).subtract(getBlockKeys(this.next));
     }
-    getChangedBlocks() {
+    getModifiedBlocks() {
         return getBlockKeys(this.next).intersect(getBlockKeys(this.previous))
             .filter((key) => getBlock(this.previous, key) !== getBlock(this.next, key));
+    }
+    getChangedBlocks() {
+        return this.getAddedBlocks().union(this.getModifiedBlocks());
     }
 }

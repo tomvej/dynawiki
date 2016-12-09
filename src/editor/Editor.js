@@ -5,6 +5,7 @@ import {reverse} from '../util';
 import './index.less';
 import substitutes from './substitute';
 import EditorStateChange from './EditorStateChange';
+import checkBlocks from './checkBlocks';
 
 class CustomEditor extends Editor {
     constructor(props) {
@@ -29,6 +30,16 @@ class CustomEditor extends Editor {
                 default:
                     this.history = '';
                     break;
+            }
+
+            const newContent = checkBlocks(diff);
+            if (newContent !== editorState.getCurrentContent()) {
+                this.props.setEditorState(EditorState.push(
+                    editorState,
+                    newContent,
+                    'change-block-type'
+                ));
+                return;
             }
         } else if (diff.hasSelectionChanged()) {
             this.history = '';
