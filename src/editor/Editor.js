@@ -32,14 +32,17 @@ class CustomEditor extends Editor {
                     break;
             }
 
-            const newContent = checkBlocks(diff);
-            if (newContent !== editorState.getCurrentContent()) {
-                this.props.setEditorState(EditorState.push(
-                    editorState,
-                    newContent,
-                    'change-block-type'
-                ));
-                return;
+            if (!['undo', 'redo'].includes(diff.getLastChangeType())) {
+                setTimeout(() => {
+                    const newContent = checkBlocks(diff);
+                    if (newContent !== this.props.editorState.getCurrentContent()) {
+                        this.props.setEditorState(EditorState.push(
+                            this.props.editorState,
+                            newContent,
+                            'change-block-type'
+                        ));
+                    }
+                });
             }
         } else if (diff.hasSelectionChanged()) {
             this.history = '';
