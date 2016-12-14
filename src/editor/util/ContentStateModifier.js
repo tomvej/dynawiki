@@ -3,9 +3,12 @@ import {Modifier, SelectionState} from 'draft-js';
 
 class ContentStateModifier extends Record({contentState: null}) {
 
+    setContentState(contentState) {
+        return this.set('contentState', contentState);
+    }
+
     setBlockType(blockKey, blockType) {
-        const selection = SelectionState.createEmpty(blockKey);
-        return Modifier.setBlockType(this.contentState, selection, blockType);
+        return this.setIn(['contentState', 'blockMap', blockKey, 'type'], blockType);
     }
 
     setInlineStyle(blockKey, start, end, inlineStyle) {
@@ -13,7 +16,7 @@ class ContentStateModifier extends Record({contentState: null}) {
             anchorOffset: start,
             focusOffset: end,
         });
-        return Modifier.applyInlineStyle(this.contentState, selection, inlineStyle);
+        return this.setContentState(Modifier.applyInlineStyle(this.contentState, selection, inlineStyle));
     }
 
     result() {
