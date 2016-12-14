@@ -18,7 +18,7 @@ class CustomEditor extends Editor {
     }
 
     onChange(editorState) {
-        const diff = new EditorStateChange({previous: this.props.editorState, next: editorState});
+        const diff = new EditorStateChange(this.props.editorState, editorState);
         if (diff.hasContentChanged()) {
             switch (editorState.getLastChangeType()) {
                 case 'insert-characters':

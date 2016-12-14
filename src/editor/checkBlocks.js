@@ -26,4 +26,4 @@ export default (diff) => diff.getChangedBlocks().reduce((contentState, blockKey)
     } else {
         return setBlockType(contentState, blockKey, 'unstyled');
     }
-}, diff.next.getCurrentContent());
+}, diff.to.getCurrentContent());

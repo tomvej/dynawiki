@@ -3,25 +3,28 @@ import {Record} from 'immutable';
 const getBlockKeys = (editorState) => editorState.getCurrentContent().getBlockMap().keySeq().toSet();
 const getBlock = (editorState, key) => editorState.getCurrentContent().getBlockForKey(key);
 
-export default class EditorStateChange extends Record({previous: null, next: null}) {
+export default class EditorStateChange extends Record({from: null, to: null}) {
+    constructor(from, to) {
+        super({from, to});
+    }
     hasSelectionChanged() {
-        return this.previous.getSelection() !== this.next.getSelection();
+        return this.from.getSelection() !== this.to.getSelection();
     }
     hasContentChanged() {
-        return this.previous.getCurrentContent() !== this.next.getCurrentContent();
+        return this.from.getCurrentContent() !== this.to.getCurrentContent();
     }
     getLastChangeType() {
-        return this.next.getLastChangeType();
+        return this.to.getLastChangeType();
     }
     getAddedBlocks() {
-        return getBlockKeys(this.next).subtract(getBlockKeys(this.previous));
+        return getBlockKeys(this.to).subtract(getBlockKeys(this.from));
     }
     getRemovedBlocks() {
-        return getBlockKeys(this.previous).subtract(getBlockKeys(this.next));
+        return getBlockKeys(this.from).subtract(getBlockKeys(this.to));
     }
     getModifiedBlocks() {
-        return getBlockKeys(this.next).intersect(getBlockKeys(this.previous))
-            .filter((key) => getBlock(this.previous, key) !== getBlock(this.next, key));
+        return getBlockKeys(this.to).intersect(getBlockKeys(this.from))
+            .filter((key) => getBlock(this.from, key) !== getBlock(this.to, key));
     }
     getChangedBlocks() {
         return this.getAddedBlocks().union(this.getModifiedBlocks());
