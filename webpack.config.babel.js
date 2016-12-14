@@ -26,7 +26,6 @@ export default ({dev}) => ({
         }),
         dev && new webpack.NoErrorsPlugin(),
         !dev && new webpack.optimize.UglifyJsPlugin(),
-        !dev && new webpack.optimize.DedupePlugin(),
         !dev && new ExtractTextPlugin('style.css'),
     ]),
     module: {
