@@ -7,12 +7,17 @@ class ContentStateModifier extends Record({contentState: null}) {
         return this.setIn(['contentState', 'blockMap', blockKey, 'type'], blockType);
     }
 
-    setInlineStyle(blockKey, start, end, inlineStyle) {
-        return this.updateIn(['contentState', 'blockMap', blockKey, 'characterList'],
-            (list) => list.splice(start, end - start,
-                list.slice(start, end).map((charData) => CharacterMetadata.applyStyle(charData, inlineStyle))
-            )
+    changeInlineStyle(blockKey, start, end, mapper) {
+        return this.updateIn(
+            ['contentState', 'blockMap', blockKey, 'characterList'],
+            (list) => list.splice(start, end - start, ...list.slice(start, end).map(mapper))
         );
+    }
+    applyInlineStyle(blockKey, start, end, inlineStyle) {
+        return this.changeInlineStyle(blockKey, start, end, (charData) => CharacterMetadata.applyStyle(charData, inlineStyle));
+    }
+    removeInlineStyle(blockKey, start, end, inlineStyle) {
+        return this.changeInlineStyle(blockKey, start, end, (charData) => CharacterMetadata.removeStyle(charData, inlineStyle));
     }
 
     result() {
