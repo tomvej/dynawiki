@@ -1,22 +1,18 @@
 import {Record} from 'immutable';
-import {Modifier, SelectionState} from 'draft-js';
+import {CharacterMetadata} from 'draft-js';
 
 class ContentStateModifier extends Record({contentState: null}) {
-
-    setContentState(contentState) {
-        return this.set('contentState', contentState);
-    }
 
     setBlockType(blockKey, blockType) {
         return this.setIn(['contentState', 'blockMap', blockKey, 'type'], blockType);
     }
 
     setInlineStyle(blockKey, start, end, inlineStyle) {
-        const selection = SelectionState.createEmpty(blockKey).merge({
-            anchorOffset: start,
-            focusOffset: end,
-        });
-        return this.setContentState(Modifier.applyInlineStyle(this.contentState, selection, inlineStyle));
+        return this.updateIn(['contentState', 'blockMap', blockKey, 'characterList'],
+            (list) => list.splice(start, end - start,
+                list.slice(start, end).map((charData) => CharacterMetadata.applyStyle(charData, inlineStyle))
+            )
+        );
     }
 
     result() {
