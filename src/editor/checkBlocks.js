@@ -1,4 +1,4 @@
-import {setBlockType} from './util';
+import {ContentStateModifier} from './util';
 
 const getHeaderLevel = (level) => {
     switch (level) {
@@ -18,12 +18,12 @@ export default (diff) => diff.getChangedBlocks().reduce((contentState, blockKey)
     /* header */
     if (block.getText().startsWith('=')) {
         const level = block.getText().match(/^=*/)[0].length;
-        return setBlockType(contentState, blockKey, `header-${getHeaderLevel(level)}`);
+        return ContentStateModifier(contentState).setBlockType(blockKey, `header-${getHeaderLevel(level)}`).result();
 
     /* block quote */
     } else if (block.getText().startsWith('>')) {
-        return setBlockType(contentState, blockKey, 'blockquote');
+        return ContentStateModifier(contentState).setBlockType(blockKey, 'blockquote');
     } else {
-        return setBlockType(contentState, blockKey, 'unstyled');
+        return ContentStateModifier(contentState).setBlockType(blockKey, 'unstyled');
     }
 }, diff.to.getCurrentContent());

@@ -4,7 +4,7 @@ import {reverse} from '../util';
 
 import './index.less';
 import substitutes from './substitute';
-import EditorStateChange from './EditorStateChange';
+import {EditorStateChange} from './util/';
 import checkBlocks from './checkBlocks';
 
 class CustomEditor extends Editor {
