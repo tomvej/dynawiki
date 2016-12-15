@@ -1,5 +1,5 @@
 import React from 'react';
-import {Editor, Modifier, EditorState} from 'draft-js';
+import {Editor, Modifier, EditorState, ContentState} from 'draft-js';
 import {reverse} from '../util';
 
 import './index.less';
@@ -92,12 +92,13 @@ class CustomEditor extends Editor {
                 end -= 1;
             }
         }
-        const contentState = Modifier.replaceText(
+        const fragment = ContentState.createFromText(reverse(result));
+        const contentState = Modifier.replaceWithFragment(
             this.props.editorState.getCurrentContent(),
             this.props.editorState.getSelection(),
-            reverse(result)
+            fragment.getBlockMap()
         );
-        this.props.setEditorState(EditorState.push(
+        this.onChange(EditorState.push(
             this.props.editorState,
             contentState,
             'insert-fragment'
