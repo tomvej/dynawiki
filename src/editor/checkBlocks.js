@@ -22,8 +22,8 @@ export default (diff) => diff.getChangedBlocks().reduce((contentState, blockKey)
 
     /* block quote */
     } else if (block.getText().startsWith('>')) {
-        return ContentStateModifier(contentState).setBlockType(blockKey, 'blockquote');
+        return ContentStateModifier(contentState).setBlockType(blockKey, 'blockquote').result();
     } else {
-        return ContentStateModifier(contentState).setBlockType(blockKey, 'unstyled');
+        return ContentStateModifier(contentState).setBlockType(blockKey, 'unstyled').result();
     }
 }, diff.to.getCurrentContent());
