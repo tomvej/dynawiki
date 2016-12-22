@@ -10,7 +10,7 @@ class ContentStateModifier extends Record({contentState: null}) {
     changeInlineStyle(blockKey, start, end, mapper) {
         return this.updateIn(
             ['contentState', 'blockMap', blockKey, 'characterList'],
-            (list) => list.splice(start, end - start, ...list.slice(start, end).map(mapper))
+            (list) => list.splice(start, end - start, ...list.slice(start, end).map(mapper)),
         );
     }
     applyInlineStyle(blockKey, start, end, inlineStyle) {

@@ -8,7 +8,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middleware = compose(
     applyMiddleware(sagaMiddleware),
-    window.devToolsExtension ? window.devToolsExtension() : (x) => x
+    window.devToolsExtension ? window.devToolsExtension() : (x) => x,
 );
 
 const store = createStore(reducer, middleware);

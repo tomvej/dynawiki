@@ -39,7 +39,7 @@ class CustomEditor extends Editor {
                         this.props.setEditorState(EditorState.push(
                             this.props.editorState,
                             newContent,
-                            'change-block-type'
+                            'change-block-type',
                         ));
                     }
                 });
@@ -61,14 +61,14 @@ class CustomEditor extends Editor {
                 const contentState = Modifier.replaceText(
                     this.props.editorState.getCurrentContent(),
                     replaceSelection,
-                    prefix.value
+                    prefix.value,
                 );
 
                 this.history = this.history.slice(0, -length) + prefix.value;
                 this.props.setEditorState(EditorState.push(
                     this.props.editorState,
                     contentState,
-                    'insert-characters'
+                    'insert-characters',
                 ));
                 return 'handled';
             }
@@ -96,12 +96,12 @@ class CustomEditor extends Editor {
         const contentState = Modifier.replaceWithFragment(
             this.props.editorState.getCurrentContent(),
             this.props.editorState.getSelection(),
-            fragment.getBlockMap()
+            fragment.getBlockMap(),
         );
         this.onChange(EditorState.push(
             this.props.editorState,
             contentState,
-            'insert-fragment'
+            'insert-fragment',
         ));
 
         return 'handled';

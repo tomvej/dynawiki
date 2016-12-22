@@ -10,7 +10,7 @@ const renderApp = (RootComponent) => {
         <AppContainer>
             <RootComponent store={store} />
         </AppContainer>,
-        document.getElementById('content')
+        document.getElementById('content'),
     );
 };
 renderApp(Root);
