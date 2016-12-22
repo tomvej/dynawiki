@@ -36,7 +36,6 @@ export default ({dev}) => ({
                     loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
-                        plugins: array([!dev && 'transform-react-remove-prop-types']),
                     },
                 }],
                 exclude: /node_modules/,
