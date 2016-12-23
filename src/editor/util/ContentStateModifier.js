@@ -19,6 +19,13 @@ class ContentStateModifier extends Record({contentState: null}) {
     removeInlineStyle(blockKey, start, end, inlineStyle) {
         return this.changeInlineStyle(blockKey, start, end, (charData) => CharacterMetadata.removeStyle(charData, inlineStyle));
     }
+    toggleInlineStyle(blockKey, start, end, inlineStyle) {
+        return this.changeInlineStyle(blockKey, start, end, (charData) => (
+            charData.hasStyle(inlineStyle)
+                ? CharacterMetadata.removeStyle(charData, inlineStyle)
+                : CharacterMetadata.applyStyle(charData, inlineStyle)
+        ));
+    }
 
     result() {
         return this.contentState;
