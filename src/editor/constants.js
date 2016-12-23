@@ -1,5 +1,11 @@
 export const NAME = 'editor';
 
+export const styles = {
+    BOLD: 'BOLD',
+    CODE: 'CODE',
+    ITALIC: 'ITALIC',
+};
+
 export const substitutions = {
     '--': 8212,
     '...': 8230,
