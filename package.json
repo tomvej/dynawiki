@@ -1,10 +1,10 @@
 {
-  "name": "redux-starter",
-  "version": "1.0.0",
-  "description": "Personal starter pack for redux applications.",
+  "name": "dynawiki",
+  "version": "0.0.1",
+  "description": "Dynamic Personal Wiki",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomvej/redux-starter.git"
+    "url": "https://github.com/tomvej/dynawiki.git"
   },
   "scripts": {
     "start": "webpack-dev-server -d --inline --hot --env.dev --progress",
