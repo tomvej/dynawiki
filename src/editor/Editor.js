@@ -3,8 +3,9 @@ import {Editor, Modifier, EditorState, ContentState} from 'draft-js';
 import {reverse} from '../util';
 
 import './index.less';
+import {styleRegex, styleChars} from './constants';
 import substitutes from './substitute';
-import {EditorStateChange} from './util/';
+import {EditorStateChange, ContentStateModifier} from './util';
 import checkBlocks from './checkBlocks';
 
 class CustomEditor extends Editor {
@@ -72,6 +73,32 @@ class CustomEditor extends Editor {
                 ));
                 return 'handled';
             }
+        } else if (chars.match(styleRegex)) {
+            const selection = this.props.editorState.getSelection();
+            const result = chars.split('')
+                .map((char, index) => [index, styleChars[char]])
+                .filter(([, style]) => !!style)
+                .reduce((contentState, [index, style]) => {
+                    const block = contentState.getBlockForKey(selection.getFocusKey());
+                    const targetStyle = block.getInlineStyleAt(selection.getFocusOffset() + (index - 1));
+                    return ContentStateModifier(contentState).toggleInlineStyle(
+                        selection.getFocusKey(),
+                        selection.getFocusOffset() + (targetStyle.contains(style) ? index + 1 : index),
+                        block.getLength(),
+                        style,
+                    ).result();
+                }, Modifier.insertText(
+                    this.props.editorState.getCurrentContent(),
+                    selection,
+                    chars,
+                ));
+            this.props.setEditorState(EditorState.push(
+                this.props.editorState,
+                result,
+                'insert-characters',
+            ));
+            this.history += chars;
+            return 'handled';
         }
 
         this.history += chars;

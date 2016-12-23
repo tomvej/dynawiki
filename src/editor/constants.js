@@ -6,6 +6,14 @@ export const styles = {
     ITALIC: 'ITALIC',
 };
 
+export const styleChars = {
+    '*': styles.BOLD,
+    _: styles.ITALIC,
+    '`': styles.CODE,
+};
+
+export const styleRegex = /\*|_|`/;
+
 export const substitutions = {
     '--': 8212,
     '...': 8230,
