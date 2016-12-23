@@ -7,6 +7,7 @@ import {styleRegex, styleChars} from './constants';
 import substitutes from './substitute';
 import {EditorStateChange, ContentStateModifier} from './util';
 import checkBlocks from './checkBlocks';
+import inlineBlocks from './inlineBlocks';
 
 class CustomEditor extends Editor {
     constructor(props) {
@@ -35,7 +36,10 @@ class CustomEditor extends Editor {
 
             if (!['undo', 'redo'].includes(diff.getLastChangeType())) {
                 setTimeout(() => {
-                    const newContent = checkBlocks(diff);
+                    let newContent = checkBlocks(diff);
+                    if (diff.getLastChangeType() !== 'insert-characters') {
+                        newContent = inlineBlocks(diff, newContent);
+                    }
                     if (newContent !== this.props.editorState.getCurrentContent()) {
                         this.props.setEditorState(EditorState.push(
                             this.props.editorState,
