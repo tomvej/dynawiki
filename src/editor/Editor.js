@@ -6,8 +6,9 @@ import './index.less';
 class CustomEditor extends Component {
     render() {
         return (
-            <div id="editor">
+            <div id="editor" onClick={() => this.editorComponent.focus()}>
                 <Editor
+                    ref={(component) => { this.editorComponent = component; }}
                     editorState={this.props.editorState}
                     onChange={this.props.setEditorState}
                 />
