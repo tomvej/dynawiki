@@ -1,10 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import {Editor, EditorState} from 'draft-js';
 
+import './index.less';
+
 class CustomEditor extends Component {
     render() {
         return (
-            <div>
+            <div id="editor">
                 <Editor
                     editorState={this.props.editorState}
                     onChange={this.props.setEditorState}

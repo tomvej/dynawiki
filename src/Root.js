@@ -10,6 +10,7 @@ const Root = ({store}) => (
     <Provider store={store}>
         <div>
             <editor.Container />
+            <br />
             <oldeditor.Container />
         </div>
     </Provider>
