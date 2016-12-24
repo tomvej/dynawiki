@@ -1,5 +1,4 @@
 import {NAME} from './constants';
-import reducer from './reducer';
-import Container from './Container';
+import {Container, reducer} from './redux';
 
 export default {NAME, reducer, Container};
