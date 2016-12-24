@@ -140,7 +140,7 @@ class CustomEditor extends Editor {
 
     render() {
         return (
-            <div id="editor" onClick={() => this.editor.focus()}>
+            <div id="editor-old" onClick={() => this.editor.focus()}>
                 <Editor
                     ref={(component) => { this.editor = component; }}
                     onChange={this.onChange}

@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux-immutable';
-import editor from './editor';
+import oldeditor from './oldeditor';
 
 export default combineReducers({
-    [editor.NAME]: editor.reducer,
+    [oldeditor.NAME]: oldeditor.reducer,
 });

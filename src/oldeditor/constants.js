@@ -1,4 +1,4 @@
-export const NAME = 'editor';
+export const NAME = 'editor-old';
 
 export const styles = {
     BOLD: 'BOLD',
