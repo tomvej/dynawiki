@@ -71,11 +71,29 @@ I can think of several ways of notifying him/her:
 > 
 > Each of the previous ways can be enhanced by a notification 
 
-## Multiple-block Styles
+## Multi-block Styles
 Code block as it is implemented most of the time works very similar to inline styles
 -- it is delineated at the start and at the end. This is due to it naturally spanning
 over several consecutive blocks. Blockquote usually works in a similar way.
 
 > I can also imagine several similar styles -- frames, blocks, etc.
 
-TBD
+This is problematic in conjunction with the rich editor approach, not when writing but when editing,
+i.e. when the user wants to select multiple blocks and make them blockquote or code. This is especially
+difficult with code which expects a lot of line breaks.
+ 
+Still, if we want to keep to the idea of rich text editor, there are two ways of changing
+multiple block type:
+ 1. Select all of them and change their type via intentions.
+ 2. Change each type one by one.
+ 
+**These styles aren't break-out styles. In order to break out of the style, you have to press `return`
+inside an empty block of such style.**
+
+## Copy and Paste
+When copying from the editor, HTML is used naturally. When pasting, remove all formatting.
+
+> It might be interesting to paste text as a special block (blockquote), so that the user knows
+> what was pasted and can format it by hand. This obviously only pertains to longer texts.
+
+> Parsing markdown should not be done at this stage.
