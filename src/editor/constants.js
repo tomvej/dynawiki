@@ -5,3 +5,8 @@ export const inlineStyle = {
     ITALIC: 'ITALIC',
     CODE: 'CODE',
 };
+
+export const changeType = {
+    INSERT_CHARACTERS: 'insert-characters',
+    BACKSPACE_CHARACTER: 'backspace-character',
+};
