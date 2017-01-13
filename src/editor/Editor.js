@@ -7,7 +7,7 @@ import './index.less';
 class CustomEditor extends Component {
     constructor(props) {
         super(props);
-        this.history = new InputHistory();
+        this.history = new InputHistory(this.editorState);
 
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
         this.handleChange = this.handleChange.bind(this);

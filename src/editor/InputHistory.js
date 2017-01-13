@@ -2,12 +2,17 @@ import {EditorStateChange} from './util';
 import {changeType} from './constants';
 
 export default class InputHistory {
-    constructor() {
-        this.history = '';
+    constructor(editorState) {
+        this.clear(editorState);
     }
 
     handleBeforeInput(chars) {
         this.history += chars;
+    }
+
+    clear(editorState) {
+        this.history = '';
+        this.startsBlock = editorState.getSelection().isCollapsed() && editorState.getSelection().getStartOffset() === 0;
     }
 
     handleChange(oldEditorState, newEditorState) {
@@ -20,11 +25,11 @@ export default class InputHistory {
                     this.history = this.history.slice(0, -1);
                     break;
                 default:
-                    this.history = '';
+                    this.clear(newEditorState);
                     break;
             }
         } else if (diff.isSelectionChanged()) {
-            this.history = '';
+            this.clear(newEditorState);
         }
     }
 }
