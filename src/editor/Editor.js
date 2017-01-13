@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Editor, EditorState} from 'draft-js';
 import InputHistory from './InputHistory';
+import Blocks from './Blocks';
 
 import './index.less';
 
@@ -8,6 +9,7 @@ class CustomEditor extends Component {
     constructor(props) {
         super(props);
         this.history = new InputHistory(this.editorState);
+        this.blocks = new Blocks(this.history);
 
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -22,6 +24,11 @@ class CustomEditor extends Component {
 
     handleBeforeInput(chars) {
         this.history.handleBeforeInput(chars);
+        const editorState = this.blocks.handleBeforeInput(this.editorState);
+        if (editorState !== this.editorState) {
+            this.handleChange(editorState);
+            return 'handled';
+        }
         return 'not-handled';
     }
 
