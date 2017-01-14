@@ -12,6 +12,7 @@ const customMap = Map({
         element: 'div',
         wrapper: <pre />,
     },
+    [blockType.HEADING]: {},
 });
 
 export default DefaultDraftBlockRenderMap.merge(customMap);

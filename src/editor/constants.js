@@ -13,7 +13,7 @@ export const changeType = {
 };
 
 export const blockType = {
-    HEADER: 'header',
+    HEADING: 'heading',
     BLOCKQUOTE: 'blockquote',
     CODE: 'code-block',
     UNORDERED_LIST: 'unordered-list-item',

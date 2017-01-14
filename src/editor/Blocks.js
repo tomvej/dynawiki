@@ -6,7 +6,7 @@ const characterMap = {
     '> ': blockType.BLOCKQUOTE,
     '* ': blockType.UNORDERED_LIST,
     '# ': blockType.ORDERED_LIST,
-    '= ': blockType.HEADER,
+    '= ': blockType.HEADING,
 };
 
 export default class Blocks {

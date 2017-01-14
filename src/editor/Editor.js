@@ -3,6 +3,7 @@ import {Editor, EditorState} from 'draft-js';
 import InputHistory from './InputHistory';
 import Blocks from './Blocks';
 import blockRenderMap from './blockRenderMap';
+import blockRenderFunction from './blockRenderFunction';
 
 import './index.less';
 
@@ -46,6 +47,7 @@ class CustomEditor extends Component {
                     onChange={this.handleChange}
                     handleBeforeInput={this.handleBeforeInput}
                     blockRenderMap={blockRenderMap}
+                    blockRendererFn={blockRenderFunction}
                 />
             </div>
         );
