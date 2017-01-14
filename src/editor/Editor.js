@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Editor, EditorState} from 'draft-js';
 import InputHistory from './InputHistory';
 import Blocks from './Blocks';
+import blockRenderMap from './blockRenderMap';
 
 import './index.less';
 
@@ -44,6 +45,7 @@ class CustomEditor extends Component {
                     editorState={this.editorState}
                     onChange={this.handleChange}
                     handleBeforeInput={this.handleBeforeInput}
+                    blockRenderMap={blockRenderMap}
                 />
             </div>
         );
