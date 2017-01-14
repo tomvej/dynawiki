@@ -10,13 +10,9 @@ const characterMap = {
 };
 
 export default class Blocks {
-    constructor(history) {
-        this.history = history;
-    }
-
-    handleBeforeInput(editorState) {
-        if (this.history.startsBlock) {
-            const newType = characterMap[this.history.history];
+    handleBeforeInput(editorState, {startsBlock, history}) {
+        if (startsBlock) {
+            const newType = characterMap[history];
             if (newType) {
                 const contentStateWithoutHistory = Modifier.removeRange(
                     editorState.getCurrentContent(),
@@ -25,7 +21,7 @@ export default class Blocks {
                 );
                 const newContentState = Modifier.setBlockType(
                     contentStateWithoutHistory,
-                    editorState.getSelection().set('anchorOffset', 0).set,
+                    editorState.getSelection(),
                     newType,
                 );
                 return EditorState.push(
@@ -37,5 +33,4 @@ export default class Blocks {
         }
         return editorState;
     }
-
 }

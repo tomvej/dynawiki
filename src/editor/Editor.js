@@ -9,7 +9,7 @@ class CustomEditor extends Component {
     constructor(props) {
         super(props);
         this.history = new InputHistory(this.editorState);
-        this.blocks = new Blocks(this.history);
+        this.blocks = new Blocks();
 
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -18,23 +18,22 @@ class CustomEditor extends Component {
     get editorState() {
         return this.props.editorState;
     }
-    set editorState(newEditorState) {
-        return this.props.setEditorState(newEditorState);
-    }
 
     handleBeforeInput(chars) {
         this.history.handleBeforeInput(chars);
-        const editorState = this.blocks.handleBeforeInput(this.editorState);
+
+        const editorState = this.blocks.handleBeforeInput(this.editorState, this.history);
         if (editorState !== this.editorState) {
             this.handleChange(editorState);
             return 'handled';
         }
+
         return 'not-handled';
     }
 
     handleChange(editorState) {
         this.history.handleChange(this.editorState, editorState);
-        this.editorState = editorState;
+        this.props.setEditorState(editorState);
     }
 
     render() {
