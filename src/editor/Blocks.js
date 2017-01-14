@@ -1,4 +1,4 @@
-import {Modifier, EditorState} from 'draft-js';
+import {Modifier, EditorState, SelectionState} from 'draft-js';
 import {blockType, changeType} from './constants';
 
 const characterMap = {
@@ -14,6 +14,7 @@ export default class Blocks {
         if (startsBlock) {
             const newType = characterMap[history];
             if (newType) {
+                const block = editorState.getSelection().getAnchorKey();
                 const contentStateWithoutHistory = Modifier.removeRange(
                     editorState.getCurrentContent(),
                     editorState.getSelection().set('anchorOffset', 0),
@@ -24,10 +25,14 @@ export default class Blocks {
                     editorState.getSelection(),
                     newType,
                 );
-                return EditorState.push(
+                const newEditorState = EditorState.push(
                     editorState,
                     newContentState,
                     changeType.CHANGE_BLOCK_TYPE,
+                );
+                return EditorState.forceSelection(
+                    newEditorState,
+                    SelectionState.createEmpty(block),
                 );
             }
         }
