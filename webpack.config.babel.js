@@ -24,7 +24,7 @@ export default ({dev}) => ({
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(dev ? 'development' : 'production'),
         }),
-        dev && new webpack.NoEmitOnErrorsPlugin(),
+        !dev && new webpack.NoEmitOnErrorsPlugin(),
         !dev && new webpack.optimize.UglifyJsPlugin(),
         !dev && new ExtractTextPlugin('style.css'),
     ),
