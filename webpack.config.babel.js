@@ -4,19 +4,19 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import webpack from 'webpack';
 
 /** removes falsy items from array */
-const array = (target) => target.filter((item) => item);
+const array = (...target) => target.filter((item) => item);
 
 export default ({dev}) => ({
-    entry: array([
+    entry: array(
         dev && 'react-hot-loader/patch',
         'babel-polyfill',
         './src/',
-    ]),
+    ),
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
     },
-    plugins: array([
+    plugins: array(
         new HtmlWebpackPlugin({
             template: 'src/index.html',
             inject: true,
@@ -27,7 +27,7 @@ export default ({dev}) => ({
         dev && new webpack.NoEmitOnErrorsPlugin(),
         !dev && new webpack.optimize.UglifyJsPlugin(),
         !dev && new ExtractTextPlugin('style.css'),
-    ]),
+    ),
     module: {
         rules: [
             {
