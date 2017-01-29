@@ -24,7 +24,7 @@ export default ({dev}) => ({
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(dev ? 'development' : 'production'),
         }),
-        dev && new webpack.NoErrorsPlugin(),
+        dev && new webpack.NoEmitOnErrorsPlugin(),
         !dev && new webpack.optimize.UglifyJsPlugin(),
         !dev && new ExtractTextPlugin('style.css'),
     ]),
@@ -32,16 +32,14 @@ export default ({dev}) => ({
         rules: [
             {
                 test: /\.js$/,
-                use: [{
-                    loader: 'babel-loader',
-                    query: {
-                        cacheDirectory: true,
-                    },
-                }],
+                loader: 'babel-loader',
                 exclude: /node_modules/,
                 options: {
-                    presets: ['es2015', 'react'],
-                    modules: false,
+                    presets: [
+                        ['es2015', {modules: false}],
+                        'react',
+                    ],
+                    cacheDirectory: true,
                 },
             },
             {
