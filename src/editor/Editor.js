@@ -15,6 +15,7 @@ class CustomEditor extends Component {
 
         this.handleBeforeInput = this.handleBeforeInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.onTab = this.onTab.bind(this);
     }
 
     get editorState() {
@@ -33,6 +34,14 @@ class CustomEditor extends Component {
         return 'not-handled';
     }
 
+    onTab(event) {
+        event.preventDefault();
+        const editorState = event.shiftKey ? this.blocks.removeDepth(this.editorState) : this.blocks.addDepth(this.editorState);
+        if (editorState !== this.editorState) {
+            this.handleChange(editorState);
+        }
+    }
+
     handleChange(editorState) {
         this.history.handleChange(this.editorState, editorState);
         this.props.setEditorState(editorState);
@@ -45,6 +54,7 @@ class CustomEditor extends Component {
                     ref={(component) => { this.editorComponent = component; }}
                     editorState={this.editorState}
                     onChange={this.handleChange}
+                    onTab={this.onTab}
                     handleBeforeInput={this.handleBeforeInput}
                     blockRenderMap={blockRenderMap}
                     blockRendererFn={blockRenderFunction}

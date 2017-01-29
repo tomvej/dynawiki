@@ -10,6 +10,7 @@ export const changeType = {
     INSERT_CHARACTERS: 'insert-characters',
     BACKSPACE_CHARACTER: 'backspace-character',
     CHANGE_BLOCK_TYPE: 'change-block-type',
+    ADJUST_DEPTH: 'adjust-depth',
 };
 
 export const blockType = {
