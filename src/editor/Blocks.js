@@ -64,16 +64,46 @@ export default class Blocks {
                 newEditorState,
                 editorState.getSelection(),
             );
+        } else {
+            return editorState;
         }
-        return editorState;
     }
 
     removeDepth(editorState) {
         switch (RichUtils.getCurrentBlockType(editorState)) {
             case blockType.ORDERED_LIST:
             case blockType.UNORDERED_LIST:
+                return this.removeDepthFromList(editorState);
             default:
                 return editorState;
+        }
+    }
+
+    removeDepthFromList(editorState) {
+        const blockKey = editorState.getSelection().getFocusKey();
+        const content = editorState.getCurrentContent();
+        const depth = content.getBlockForKey(blockKey).getDepth();
+
+        if (depth > 0) {
+            const newContent = content.getBlockMap().keySeq()
+                .skipUntil((key) => key === blockKey)
+                .skip(1)
+                .takeWhile((key) => content.getBlockForKey(key).getDepth() > depth)
+                .reduce(
+                    (result, key) => ContentStateModifier.updateDepth(result, key, -1),
+                    ContentStateModifier.updateDepth(content, blockKey, -1),
+                );
+            const newEditorState = EditorState.push(
+                editorState,
+                newContent,
+                changeType.ADJUST_DEPTH,
+            );
+            return EditorState.forceSelection(
+                newEditorState,
+                editorState.getSelection(),
+            );
+        } else {
+            return editorState;
         }
     }
 
